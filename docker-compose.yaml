@@ -1,0 +1,60 @@
+services:
+  mysql-server-ecommerce-service:
+    image: mysql:8.0
+    container_name: mysql-server-ecommerce
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db-ecommerce-prod
+      MYSQL_USER: devops
+      MYSQL_PASSWORD: devopspass
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_data_backup:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend-ecommerce-service:
+    # build: .
+    image: ${BACKEND_IMAGE}:${BACKEND_TAG}
+    container_name: backend-ecommerce
+    restart: always
+    ports:
+      - "8089:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-server-ecommerce-service:3306/db-ecommerce-prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: devops
+      SPRING_DATASOURCE_PASSWORD: devopspass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      mysql-server-ecommerce-service:
+        condition: service_healthy
+
+  phpmyadmin-ecommerce-service:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-ecommerce
+    restart: always
+    depends_on:
+      - mysql-server-ecommerce-service                  # correspond au nom du service bd
+    ports:
+      - "8088:80"
+    environment:
+      PMA_HOST: mysql-server-ecommerce-service          # correspond au nom du service bd
+
+  # 🔹 Frontend Angular via Nginx
+  frontend-ecommerce-service:
+    image: ${FRONTEND_IMAGE}:${FRONTEND_TAG}
+    container_name: frontend-ecommerce
+    restart: always
+    ports:
+      - "5173:80"   # Angular écoute sur 5173 en local
+
+    depends_on:
+      - backend-ecommerce-service
+
+volumes:
+  mysql_data_backup:
