@@ -18,7 +18,7 @@ pipeline {
              FRONTEND_TAG = "1.${BUILD_NUMBER}"
              // Frontend  private repository
              FRONTEND_REPO_URL     = 'https://github.com/ousmanediallo902/frontend-ecommerce.git'
-             FRONTEND_REPO_BRANCH  = 'master'
+             FRONTEND_REPO_BRANCH  = 'main'
              FRONTEND_CREDENTIALS  = 'credential-id-github'
 
 
