@@ -208,3 +208,5 @@ classDiagram
 - **Base de données** : Relations gérées via annotations JPA
 - **Validation** : Bean Validation (Jakarta Validation)
 - **Sérialisation** : Jackson avec gestion des cycles via `@JsonIdentityInfo`
+
+//bonjour
