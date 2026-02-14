@@ -26,6 +26,9 @@ WORKDIR /app
 # Copier le JAR généré depuis l'étape de build et le renommer
 COPY --from=build /app/target/*.jar backend-ecommerce.jar
 
+# Créer le répertoire pour les uploads
+RUN mkdir -p /app/uploads
+
 # Exposer le port 8080 pour accéder à l'application Spring Boot
 EXPOSE 8080
 

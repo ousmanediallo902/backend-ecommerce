@@ -30,6 +30,9 @@ services:
       SPRING_DATASOURCE_USERNAME: devops
       SPRING_DATASOURCE_PASSWORD: devopspass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      UPLOAD_PATH: /app/uploads/
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       mysql-server-ecommerce-service:
         condition: service_healthy
@@ -58,3 +61,4 @@ services:
 
 volumes:
   mysql_data_backup:
+  uploads_data:
