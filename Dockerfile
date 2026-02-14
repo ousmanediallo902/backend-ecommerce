@@ -34,3 +34,4 @@ EXPOSE 8080
 
 # Lancer l'application au démarrage du conteneur
 ENTRYPOINT ["java", "-jar", "backend-ecommerce.jar"]
+# bon
